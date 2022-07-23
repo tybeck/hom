@@ -20,7 +20,7 @@ jobs:
       - name: Deploy
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_PRIVATE_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDh7l/3n0dXcSXinSsCoNdtCq2KZQe9sTXSCCzejxBVnPkYns4iXiMksXrGdWTiktLXr9GGI2Fy5UgMdceD02KjwaAzV/MNxgWRAfnc4DtN24Gu6jsmIPktVclJTTk/WETCE6LnaM1xxl5C9rBnin/Z94k2BvOIf6mOoaIQ8vV+VbwHG8OZqKcn4RUnq4XVcfaGVz+zLF7PyDPfCQAa+X3wy//Q7uwWN+mbNp/BT7f80w4VKmFBMTIwQAiHKv7QX5Ttr+XWyagzuB/ZAMBBUL6mHFlDlIyPVW3ceq58KPTsg2nrN5N1ykS6rF5haPqh0k2r9E0Qf4ebutCe1aIp1FEO7xNMs2WkKImdojGD2zLBvIaVdRIbVLdsYhawwjbn8Gtw+zivxychli1FISqFqsyV8wwm13WcV9xEEsSGc4hEz8caqXsfwprFWgdW6cLyFsGZM0+1kammSXHOWNNuCwdpzm1djyMvv4PRnbpq+IORQ037Ad8VSB9hvIQLhPGf/K0= deploy@hom-palmyra
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.DEPLOY_IP }}
