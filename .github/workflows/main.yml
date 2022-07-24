@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Expo
+        run: yarn install expo -g
+
       - name: Install
         run: yarn install
 
