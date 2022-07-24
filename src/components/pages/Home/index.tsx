@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 function Home(): React.ReactElement {
   return (
     <View>
-      <Text>Hello World!!!</Text>
+      <Text>Hello World!!! Caitlin rocks!</Text>
     </View>
   )
 }
