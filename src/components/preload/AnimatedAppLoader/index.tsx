@@ -1,27 +1,39 @@
-import { useEffect, useState } from 'react';
-import { Asset } from 'expo-asset';
+import React, {useEffect, useState} from 'react';
+import {Asset} from 'expo-asset';
+
+import {useCustomFonts} from '@hom/hooks';
+import {useAuthLoader} from '@hom/hooks';
+import {useApp} from '@hom/context';
+import {noop} from '@hom/utils';
 
 import AnimatedSplashScreen from '../AnimatedSplashScreen';
 
-import { noop } from '../../../utils/noop';
+function AnimatedAppLoader({children, image}) {
+  const [isSplashReady, setSplashReady] = useState<boolean>(false);
+  const [isAppReady, setAppReady] = useState<boolean>(false);
+  const [fontsLoaded] = useCustomFonts();
+  const {hasSettingsLoaded} = useApp();
+  const {isAuthReady} = useAuthLoader();
 
-function AnimatedAppLoader({ children, image }) {
-  const [isSplashReady, setSplashReady] = useState(false);
+  useEffect(() => {
+    if (isSplashReady && fontsLoaded && hasSettingsLoaded && isAuthReady) {
+      setAppReady(true);
+    }
+  }, [isAuthReady, isSplashReady, fontsLoaded, hasSettingsLoaded]);
 
   useEffect(() => {
     (async () => {
       async function prepare() {
-        await Asset
-          .fromURI(image.uri)
+        await Asset.fromURI(image.uri)
           .downloadAsync()
           .finally(() => setSplashReady(true))
           .catch(noop);
       }
       await prepare();
-    })()
+    })();
   }, [image]);
 
-  if (!isSplashReady) {
+  if (!isAppReady) {
     return null;
   }
 

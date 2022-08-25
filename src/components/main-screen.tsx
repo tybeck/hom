@@ -1,18 +1,21 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { ThemeProvider } from 'styled-components/native';
-import { useCallback } from 'react';
-import { Platform } from 'react-native';
+import React, {useCallback} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {Platform, SafeAreaView} from 'react-native';
+import styled from 'styled-components/native';
 import * as Updates from 'expo-updates';
 
-import { Stack } from '@hom/navigation';
-import { ScreenType } from '@hom/navigation-types';
+import {getLinkingOptions} from '@hom/navigation-linking-options';
+import {Navigation} from '@hom/navigation';
+import {OS} from '@hom/types';
 
-import Home from './pages/Home';
+const RootView = styled(SafeAreaView)`
+  flex: 1;
+`;
 
 function MainScreen() {
-  // TODO: Implement "update" logic?:"
+  // TODO: Implement "update" logic?
   const onReloadPress = useCallback(() => {
-    if (Platform.OS === "web") {
+    if (Platform.OS === OS.web) {
       location.reload();
     } else {
       Updates.reloadAsync();
@@ -20,11 +23,22 @@ function MainScreen() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={ScreenType.Home}>
-        <Stack.Screen name={ScreenType.Home} component={Home} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <RootView>
+      {/*<View style={{ height: 2000 }}>*/}
+      {/*  <View style={{ flex: 1 }}>*/}
+      {/*    <ScrollView*/}
+      {/*      scrollEventThrottle={4}*/}
+      {/*      onScroll={()=>console.log('ok')}*/}
+      {/*      contentContainerStyle={{ flexGrow: 1 }}*/}
+      {/*    >*/}
+      {/*      <Typography text="Hello" />*/}
+      {/*    </ScrollView>*/}
+      {/*  </View>*/}
+      {/*</View>*/}
+      <NavigationContainer linking={getLinkingOptions()}>
+        <Navigation />
+      </NavigationContainer>
+    </RootView>
   );
 }
 

@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {Animated, StyleSheet, View, Text} from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import Constants from 'expo-constants';
 
-function AnimatedSplashScreen({ children, image }) {
-  const animation = useMemo(() => new Animated.Value(1), []);
+function AnimatedSplashScreen({children, image}) {
+  const animation = useMemo(() => new Animated.Value(0.75), []);
   const [isAppReady, setAppReady] = useState(false);
   const [isSplashAnimationComplete, setAnimationComplete] = useState(false);
 
@@ -31,7 +31,7 @@ function AnimatedSplashScreen({ children, image }) {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       {isAppReady && children}
       {!isSplashAnimationComplete && (
         <Animated.View
@@ -46,9 +46,9 @@ function AnimatedSplashScreen({ children, image }) {
         >
           <Animated.Image
             style={{
-              width: "100%",
-              height: "100%",
-              resizeMode: Constants.manifest.splash.resizeMode || "contain",
+              width: '75%',
+              height: '75%',
+              resizeMode: Constants.manifest.splash.resizeMode || 'contain',
               transform: [
                 {
                   scale: animation,

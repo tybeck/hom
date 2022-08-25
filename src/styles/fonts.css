@@ -1,0 +1,29 @@
+/**
+ * @electron
+ * Only loaded in for electron since `expo-font` works
+ * out-of-the-box for web, ios and android.
+ */
+
+@font-face {
+  font-family: 'Nunito';
+  font-weight: 400;
+  src: url('../../assets/fonts/nunito.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'NunitoBlack';
+  font-weight: 900;
+  src: url('../../assets/fonts/nunito-black.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LithosPro';
+  font-weight: 400;
+  src: url('../../assets/fonts/lithos-pro.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LithosProBlack';
+  font-weight: 900;
+  src: url('../../assets/fonts/lithos-pro-black.ttf') format('truetype');
+}
