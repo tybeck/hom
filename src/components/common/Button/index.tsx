@@ -16,6 +16,7 @@ interface Props {
   typographyProps: Omit<TypographyProps, 'text'>;
   fill?: ColorName;
   style?: ViewStyle;
+  onPress?: () => void;
 }
 
 const ButtonView = styled.View`
@@ -27,9 +28,9 @@ const ButtonView = styled.View`
   width: ${() => (isElectron() ? 'calc(100% + 1px)' : '100%')};
 `;
 
-const Button: FC<Props> = ({style, text, fill, typographyProps, buttonProps}) => {
+const Button: FC<Props> = ({style, text, fill, typographyProps, buttonProps, onPress}) => {
   return (
-    <Pressable onPress={() => {}}>
+    <Pressable onPress={onPress || null}>
       <View style={{alignItems: 'baseline', ...style}}>
         <ButtonComponent
           iosAdjustWidthBy={1}

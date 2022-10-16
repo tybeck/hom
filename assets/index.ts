@@ -9,6 +9,7 @@ const hoagieRoll = require('./hoagie.png');
 const carrotsMeat = require('./carrots-meat.png');
 const newsletter = require('./newsletter.png');
 const logoSmallest = require('./logo-smallest.png');
+const buildYourOwnBanner = require('./build-your-own-banner.png');
 
 export {
   burger,
@@ -22,4 +23,5 @@ export {
   carrotsMeat,
   newsletter,
   logoSmallest,
+  buildYourOwnBanner,
 }

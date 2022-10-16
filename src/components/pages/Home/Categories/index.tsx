@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, RefObject, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import {Platform} from 'react-native';
+import {Platform, View} from 'react-native';
 import {css} from 'styled-components';
 
 import {ColorName} from '@hoagiesonmain/shared';
 
+import {OS} from '@hom/types';
 import {Theme} from '@hom/theme';
-import {useCategoryQuery, Category as ICategory} from '@hom/queries';
+import {useApp} from '@hom/context';
+import {Category as ICategory} from '@hom/queries';
 import {hoagie, burger, fries, cheesesteak, chicken} from '@hom/assets';
 
 import {Category} from './Category';
-import {OS} from '@hom/types';
 
 const CategoriesView = styled.View`
   flex-wrap: wrap;
@@ -57,9 +58,13 @@ const sizes = [30, 40, 30, 45, 35, 20];
 
 const images = [hoagie, burger, fries, cheesesteak, chicken];
 
-function Categories(): React.ReactElement {
-  const {data} = useCategoryQuery();
-  const categories = data?.getCategories || [];
+interface CategoriesProps<T> {
+  viewRef?: RefObject<T>;
+  onPositionChange?: (y: number) => void;
+}
+
+const Categories: FC<CategoriesProps<View>> = ({viewRef, onPositionChange}): React.ReactElement => {
+  const {categories} = useApp();
   const [allCategories, setAllCategories] = useState<Omit<ICategory, '__typename'>[]>([]);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const onMouseEnter = (categoryIndex: number) => () => setHoverIndex(categoryIndex);
@@ -85,40 +90,51 @@ function Categories(): React.ReactElement {
     return sizes[categoryIndex];
   };
 
+  const onLayout = (event: {nativeEvent: {layout: {y: number}}}) => {
+    const y = event?.nativeEvent?.layout?.y;
+    if (onPositionChange) {
+      onPositionChange(y);
+    }
+  };
+
+  const filteredCategories = allCategories.filter(category => category.onHomePage || !category._id);
+
   return (
-    <CategoriesView>
+    <CategoriesView ref={viewRef} onLayout={onLayout}>
       {allCategories.length !== 0 &&
-        allCategories.map((category, categoryIndex) => {
-          const groupIndex = Math.floor(categoryIndex / 3);
-          const hoverGroupIndex = hoverIndex !== null ? Math.floor(hoverIndex / 3) : null;
-          const isLastItem = allCategories.length - 1 === categoryIndex;
-          let headingColor = null;
-          if (isLastItem) {
-            headingColor = ColorName.SpaceCadet;
-          }
-          return (
-            <CategoryWrap
-              size={getSize(categoryIndex)}
-              onMouseEnter={onMouseEnter(categoryIndex)}
-              onMouseLeave={onMouseLeave}
-              hover={categoryIndex === hoverIndex}
-              isInHoverGroup={
-                (isLastItem && categoryIndex === hoverIndex) ||
-                (!isLastItem && categoryIndex !== hoverIndex && groupIndex === hoverGroupIndex)
-              }
-              color={category.color}
-              key={category._id}
-            >
-              <Category
-                category={category}
-                image={images[categoryIndex]}
-                headingColor={headingColor}
-              />
-            </CategoryWrap>
-          );
-        })}
+        filteredCategories
+          .map((category, categoryIndex) => {
+            const groupIndex = Math.floor(categoryIndex / 3);
+            const hoverGroupIndex = hoverIndex !== null ? Math.floor(hoverIndex / 3) : null;
+            const isLastItem = filteredCategories.length - 1 === categoryIndex;
+            let headingColor = null;
+            if (isLastItem) {
+              headingColor = ColorName.SpaceCadet;
+            }
+            return (
+              <CategoryWrap
+                size={getSize(categoryIndex)}
+                onMouseEnter={onMouseEnter(categoryIndex)}
+                onMouseLeave={onMouseLeave}
+                hover={categoryIndex === hoverIndex}
+                isInHoverGroup={
+                  (isLastItem && categoryIndex === hoverIndex) ||
+                  (!isLastItem && categoryIndex !== hoverIndex && groupIndex === hoverGroupIndex)
+                }
+                color={category.color}
+                key={category._id}
+              >
+                <Category
+                  category={category}
+                  image={images[categoryIndex]}
+                  headingColor={headingColor}
+                />
+              </CategoryWrap>
+            );
+          })
+      }
     </CategoriesView>
   );
-}
+};
 
 export {Categories};

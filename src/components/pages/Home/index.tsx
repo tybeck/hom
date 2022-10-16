@@ -1,9 +1,8 @@
-import React, {useRef} from 'react';
+import React, {FC} from 'react';
 import styled from 'styled-components/native';
-import {ScrollView} from 'react-native';
 
-import {Footer} from '@hom/layout';
 import {useApp} from '@hom/context';
+import {Content} from '@hom/types';
 
 import {Delivery} from './Delivery';
 import {Categories} from './Categories';
@@ -18,31 +17,25 @@ const HomeView = styled.View`
   display: flex;
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  flex: 1;
 `;
 
-function Home(): React.ReactElement {
-  const ref = useRef<any>(null);
-  const {setScroll} = useApp();
+const Home: FC = ({children}): React.ReactElement => {
+  const {setComponentPositionY} = useApp();
 
-  const onScroll = (event: {nativeEvent: {contentOffset: {y: number}}}) =>
-    setScroll(event?.nativeEvent?.contentOffset?.y || 0);
+  const onSubscribePositionChange = (value) => setComponentPositionY(Content.HomeContactUs, value);
 
   return (
     <HomeView>
-      <ScrollView ref={ref} onScroll={onScroll} scrollEventThrottle={4}>
-        {/*<Fold />*/}
-        <Delivery />
-        <Categories />
-        <Ingredients />
-        <Reviews />
-        <Posts />
-        <Subscribe />
-        <Footer />
-      </ScrollView>
+      {/*<Fold />*/}
+      <Delivery />
+      <Categories />
+      <Ingredients />
+      <Reviews />
+      <Posts />
+      <Subscribe onPositionChange={onSubscribePositionChange} />
+      {children}
     </HomeView>
   );
-}
+};
 
 export {Home};

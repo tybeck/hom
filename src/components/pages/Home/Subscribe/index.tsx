@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {FC, RefObject, useState} from 'react';
 import styled from 'styled-components/native';
+import {Platform, View} from 'react-native';
+import {css} from 'styled-components';
 
 import {ColorName} from '@hoagiesonmain/shared';
 
@@ -8,11 +10,9 @@ import {Theme} from '@hom/theme';
 import {unpackAsset} from '@hom/utils';
 import {newsletter} from '@hom/assets';
 import {Input, Typography} from '@hom/common';
+import {useApp} from '@hom/context';
 
 import {Send} from './Send';
-import {Platform} from 'react-native';
-import {css} from 'styled-components';
-import {useApp} from '@hom/context';
 
 const SubscribeView = styled.View`
   background: ${Theme.colors[ColorName.Linen]};
@@ -76,12 +76,24 @@ const SendButton = styled.View`
   margin-top: 15px;
 `;
 
-function Subscribe(): React.ReactElement {
+interface SubscribeProps<T> {
+  viewRef?: RefObject<T>;
+  onPositionChange?: (y: number) => void;
+}
+
+const Subscribe: FC<SubscribeProps<View>> = ({viewRef, onPositionChange}) => {
   const {getSetting} = useApp();
   const [phoneNo] = useState<string>(getSetting(SettingType.PhoneNumber));
 
+  const onLayout = (event: {nativeEvent: {layout: {y: number}}}) => {
+    const y = event?.nativeEvent?.layout?.y;
+    if (onPositionChange) {
+      onPositionChange(y);
+    }
+  };
+
   return (
-    <SubscribeView>
+    <SubscribeView ref={viewRef} onLayout={onLayout}>
       <NewsletterImage resizeMode="contain" source={unpackAsset(newsletter)} />
       <SubscribeColumn>
         <Typography font={Font.NunitoBlack} color={ColorName.SpaceCadet}>
@@ -97,6 +109,6 @@ function Subscribe(): React.ReactElement {
       </SubscribeColumn>
     </SubscribeView>
   );
-}
+};
 
 export {Subscribe};

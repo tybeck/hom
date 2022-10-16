@@ -13,14 +13,16 @@ export type RootStackParamList = {
 
 export type RootDrawerParamList = {
   Home: undefined;
-  Menu: undefined;
+  Products: {
+    categories?: string;
+  };
   Location: undefined;
   ContactUs: undefined;
 };
 
 export enum DrawerNavigation {
   Home = 'Home',
-  Menu = 'Menu',
+  Products = 'Products',
   Location = 'Location',
   ContactUs = 'ContactUs',
 }
@@ -32,6 +34,7 @@ export type RootDrawerScreenProps<T extends keyof RootDrawerParamList> = DrawerS
 
 export type AllScreenProps = NavigationProp<RootDrawerParamList, keyof RootDrawerParamList>;
 export type HomeScreenProps = NavigationProp<RootDrawerParamList, 'Home'>;
+export type ProductsScreenProps = NavigationProp<RootDrawerParamList, 'Products'>;
 
 export type MainScreenProps = NavigationProp<RootStackParamList, keyof RootStackParamList>;
 export type SignInScreenProps = NavigationProp<RootStackParamList, 'SignIn'>;

@@ -28,6 +28,7 @@ export default {
     }
   },
   android: {
+    package: 'com.hompalmyra.hom',
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#FFFFFF'

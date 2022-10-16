@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import {AllScreenProps, DrawerNavigation} from '@hom/navigation-types';
-import {Font} from '@hom/types';
+import {Content, Font, HomScroll} from '@hom/types';
 
-import {Link, LinkTypography} from '../../common/Link';
+import {Link, LinkTypography} from '@hom/common';
 
 export const NavListItem = styled.View`
   margin: 0 1rem;
@@ -22,8 +22,35 @@ export const NavListView = styled.View`
 
 function NavList() {
   const navigation = useNavigation<AllScreenProps>();
+  const route = useRoute();
+
+  const getContentAreaFromPage = (page: DrawerNavigation) => {
+    switch (page) {
+      case DrawerNavigation.ContactUs:
+        return Content.HomeContactUs;
+      case DrawerNavigation.Location:
+        return Content.Bottom;
+      default:
+        return Content.Top;
+    }
+  };
+
   const navigate = (page) => {
     return () => {
+      const whitelistedPages = [
+        DrawerNavigation.Home,
+        DrawerNavigation.Location,
+        DrawerNavigation.ContactUs,
+      ];
+      const childSymbol = Object.getOwnPropertySymbols(route)?.[0];
+      if (childSymbol) {
+        const name: DrawerNavigation = route[childSymbol].routes?.[0]?.name;
+        if (DrawerNavigation.Home === name && whitelistedPages.includes(page)) {
+          return globalThis.dispatchEvent(
+            new CustomEvent(HomScroll, {detail: getContentAreaFromPage(page)}),
+          );
+        }
+      }
       return navigation.navigate(page);
     };
   };
@@ -37,7 +64,7 @@ function NavList() {
         <Link text="Home" typography={typography} onPress={navigate(DrawerNavigation.Home)} />
       </NavListItem>
       <NavListItem>
-        <Link text="Menu" typography={typography} onPress={navigate(DrawerNavigation.Menu)} />
+        <Link text="Menu" typography={typography} onPress={navigate(DrawerNavigation.Products)} />
       </NavListItem>
       <NavListItem>
         <Link

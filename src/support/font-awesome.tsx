@@ -1,10 +1,11 @@
 import React, {FC} from 'react';
+import {Platform} from 'react-native';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import styled from 'styled-components/native';
 
-import {isElectron} from './is-electron';
-import {Platform} from 'react-native';
 import {OS} from '@hom/types';
+
+import {isElectron} from './is-electron';
 
 interface Icon {
   icon: IconProp;

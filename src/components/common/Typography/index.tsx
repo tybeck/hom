@@ -18,6 +18,7 @@ export interface TypographyProps {
   center?: boolean;
   textCenter?: boolean;
   children?: string | ReactNode;
+  uppercase?: boolean;
 }
 
 const TypographyText = styled.Text<TypographyProps>`
@@ -37,6 +38,12 @@ const TypographyText = styled.Text<TypographyProps>`
       text-align: center;
       width: 100%;
     `}
+
+  ${({uppercase}) =>
+    uppercase &&
+    css`
+      text-transform: uppercase;
+    `}
 `;
 
 const Typography: FC<TypographyProps> = ({children, text, style, ...props}) => {
@@ -46,6 +53,7 @@ const Typography: FC<TypographyProps> = ({children, text, style, ...props}) => {
     color: Theme.colors[props.color] || Theme.colors[ColorName.Black],
     center: props.center || false,
     textCenter: props.textCenter || false,
+    uppercase: props.uppercase || false,
   };
   return (
     <TypographyText {...typographyProps} style={style}>

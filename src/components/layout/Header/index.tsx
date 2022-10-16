@@ -48,10 +48,9 @@ const PhoneView = styled.View`
 
 function Header() {
   const [showBg, setShowBg] = useState<boolean>(false);
-  const [headerHeight, setHeaderHeight] = useState<number | null>(null);
   const headerRef = useRef<HTMLElement>(null);
   const isNative = isNativeMobile();
-  const {scroll} = useApp();
+  const {scroll, setHeaderHeight, headerHeight} = useApp();
 
   useEffect(() => {
     const element = headerRef?.current;
@@ -68,7 +67,7 @@ function Header() {
         }
       }
     }
-  }, [scroll]);
+  }, [headerHeight, scroll]);
 
   const onLayout = ({
     nativeEvent: {
